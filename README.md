@@ -10,11 +10,16 @@ Production-ready configuration for provisioning and deploying a simple Django ap
     - [Features](#features)
     - [Design](#design)
     - [General workflow](#general-workflow)
+        - [Get live site into production:](#get-live-site-into-production)
+        - [Enable Nginx site](#enable-nginx-site)
+        - [Create the Systemd service](#create-the-systemd-service)
+        - [Load the new site in Nginx and start the systemd service](#load-the-new-site-in-nginx-and-start-the-systemd-service)
     - [Required packages](#required-packages)
-    - [Nginx Virtual Host config](#nginx-virtual-host-config)
-    - [Systemd service](#systemd-service)
+        - [Nginx Virtual Host config](#nginx-virtual-host-config)
+        - [Systemd service](#systemd-service)
     - [Folder structure](#folder-structure)
     - [Reference](#reference)
+    - [Licence](#licence)
 
 <!-- markdown-toc end -->
 
@@ -42,7 +47,7 @@ Production-ready configuration for provisioning and deploying a simple Django ap
 
 ## General workflow
 
-Get live site into production:
+### Get live site into production:
 
 ```
 $ sed "s/SITENAME/mysite-staging.example.com/g" \
@@ -50,14 +55,14 @@ $ sed "s/SITENAME/mysite-staging.example.com/g" \
     /etc/nginx/sites-available/mysite-staging.example.com
 ```
 
-Enable Nginx site
+### Enable Nginx site
 
 ```
 sudo ln -s ../sites-available/mysite-staging.example.com \
     /etc/nginx/sites-enabled/mysite-staging.example.com
 ```
 
-Create the Systemd service
+### Create the Systemd service
 
 ```
 sed "s/SITENAME/mysite-staging.example.com/g" \
@@ -65,7 +70,7 @@ sed "s/SITENAME/mysite-staging.example.com/g" \
     /lib/systemd/system/gunicorn-mysite-staging.example.com.service
 ```
 
-Load the new site in Nginx and start the systemd service
+### Load the new site in Nginx and start the systemd service
 
 ```
 $ sudo service nginx reload
@@ -86,12 +91,12 @@ eg, on Ubuntu:
     sudo apt-get install nginx git python3 python3-pip
     sudo pip3 install virtualenv
 
-## Nginx Virtual Host config
+### Nginx Virtual Host config
 
 * see nginx.template.conf
 * replace SITENAME with, eg, staging.my-domain.com
 
-## Systemd service
+### Systemd service
 
 * see gunicorn-upstart.template.conf
 * replace SITENAME with, eg, staging.my-domain.com
