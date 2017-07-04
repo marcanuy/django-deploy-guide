@@ -1,0 +1,23 @@
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+PIDFile=/run/gunicorn/pid
+User=chengue
+Group=www-data
+RuntimeDirectory=gunicorn
+WorkingDirectory=/home/chengue/sites/example/example
+ExecStart=/home/chengue/.virtualenvs/example/bin/gunicorn \
+          --access-logfile /home/chengue/sites/logs/example.access.log \
+          --error-logfile /home/chengue/sites/logs/example.error.log \
+          --pid /run/gunicorn/pid   \
+          --env DJANGO_SETTINGS_MODULE=example.settings.production \
+          --bind unix:/run/gunicorn/socket example.wsgi
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
